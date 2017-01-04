@@ -22,7 +22,7 @@ public class DeleteTable {
         System.out.println("Will try to connect to Kudu master at " + KUDU_MASTER);
         System.out.println("Run with -DkuduMaster=myHost:port to override.");
         System.out.println("-----------------------------------------------");
-        String tableName = "Tabla";
+        String tableName = "Table_1";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTER).build();
 
         try {

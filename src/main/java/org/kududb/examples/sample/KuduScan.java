@@ -22,14 +22,16 @@ public class KuduScan {
         System.out.println("Will try to connect to Kudu master at " + KUDU_MASTER);
         System.out.println("Run with -DkuduMaster=myHost:port to override.");
         System.out.println("-----------------------------------------------");
-        String tableName = "Tabla_LuisVM";
+        String tableName = "Table_1";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTER).build();
 
         try {
             KuduTable table = client.openTable(tableName);
+            table.getSchema();
             List<String> projectColumns = new ArrayList<>(2);
+            projectColumns.add("key");
             projectColumns.add("value");
-            projectColumns.add("description");
+
             KuduScanner scanner = client.newScannerBuilder(table)
                     .setProjectedColumnNames(projectColumns)
                     .build();
@@ -37,7 +39,7 @@ public class KuduScan {
                 RowResultIterator results = scanner.nextRows();
                 while (results.hasNext()) {
                     RowResult result = results.next();
-                    System.out.println(result.getString(0)+" | "+ result.getString(1));
+                    System.out.println(result.rowToString());
                 }
             }
         } catch (Exception e) {
@@ -50,6 +52,7 @@ public class KuduScan {
             }
         }
     }
+
 }
 
 

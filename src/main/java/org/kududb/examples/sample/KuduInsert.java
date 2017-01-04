@@ -22,19 +22,18 @@ public class KuduInsert {
         System.out.println("Will try to connect to Kudu master at " + KUDU_MASTER);
         System.out.println("Run with -DkuduMaster=myHost:port to override.");
         System.out.println("-----------------------------------------------");
-        String tableName = "Tabla_LuisVM";
+        String tableName = "Table_1";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTER).build();
 
         try {
 
             KuduTable table = client.openTable(tableName);
             KuduSession session = client.newSession();
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 50; i++) {
                 Insert insert = table.newInsert();
                 PartialRow row = insert.getRow();
                 row.addInt(0, i);
-                row.addString(1, "value " + i);
-                row.addString(2, "Probando Insert");
+                row.addString(1, "This is the row number: "+ i);
                 session.apply(insert);
             }
 

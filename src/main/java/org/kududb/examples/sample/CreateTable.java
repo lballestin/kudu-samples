@@ -22,23 +22,21 @@ public class CreateTable {
         System.out.println("Will try to connect to Kudu master at " + KUDU_MASTER);
         System.out.println("Run with -DkuduMaster=myHost:port to override.");
         System.out.println("-----------------------------------------------");
-        String tableName = "Tabla_LuisVM";
+        String tableName = "Table_1";
         KuduClient client = new KuduClient.KuduClientBuilder(KUDU_MASTER).build();
 
         try {
-            List<ColumnSchema> columns = new ArrayList(3);
+            List<ColumnSchema> columns = new ArrayList(2);
             columns.add(new ColumnSchema.ColumnSchemaBuilder("key", Type.INT32)
                     .key(true)
                     .build());
             columns.add(new ColumnSchema.ColumnSchemaBuilder("value", Type.STRING)
                     .build());
-            columns.add(new ColumnSchema.ColumnSchemaBuilder("description", Type.STRING)
-                    .build());
             List<String> rangeKeys = new ArrayList<>();
             rangeKeys.add("key");
             Schema schema = new Schema(columns);
             client.createTable(tableName, schema,
-                    new CreateTableOptions().setRangePartitionColumns(rangeKeys));
+                    new CreateTableOptions().setRangePartitionColumns(rangeKeys).addHashPartitions(rangeKeys, 4));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
